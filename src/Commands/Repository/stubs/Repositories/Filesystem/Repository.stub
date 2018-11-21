@@ -1,0 +1,96 @@
+<?php
+/**
+ * Criado por Maizer Aly de O. Gomes para quickcloud.
+ * Email: maizer.gomes@gmail.com / maizer.gomes@ekutivasolutions / maizer.gomes@outlook.com
+ * Usuário: maizerg
+ * Data: 6/20/18
+ * Hora: 11:07 AM
+ */
+
+namespace Quick3Pay\Repositories\Filesystem;
+
+
+use Quick3Pay\Contracts\Repositories\FilesystemRepositoryInterface;
+use Quick3Pay\Repositories\Contracts\CountryInterface;
+
+class CountryRepository implements CountryInterface, FilesystemRepositoryInterface
+{
+    /**
+     * @param array $attributes
+     *
+     * @return array
+     */
+    public function all(): array
+    {
+        return collect(countries(true))->map(function ($item, $key) {
+            return [
+                'code' => $key,
+                'name' => $item['translations']['por']['common'] ?? $item['name']['common'],
+                //                'continent_id' => trim(array_keys($item['geo']['continent'])[0]),
+            ];
+        })->toArray();
+    }
+
+    /**
+     * @param $countryCode
+     *
+     * @return array
+     */
+    public function findStatesByCountryId($countryCode): array
+    {
+        $country = $this->findById($countryCode);
+
+        return collect($country->getDivisions())->map(function ($item, $key) use ($country) {
+            return [
+                'code' => $key,
+                'name' => $item['name'] ?: 'N/A',
+                //                'country_' => $country->getIsoAlpha2(),
+            ];
+        })->toArray();
+    }
+
+    /**
+     * @param $code
+     *
+     * @return array|\Rinvex\Country\Country
+     */
+    public function findById($code): object
+    {
+        return country($code);
+    }
+
+    public function find($uuid)
+    {
+        // TODO: Implement find() method.
+    }
+
+    public function delete($uuid)
+    {
+        // TODO: Implement delete() method.
+    }
+
+    public function uuidToID($uuid)
+    {
+        // TODO: Implement uuidToID() method.
+    }
+
+    public function uuidFromID($id)
+    {
+        // TODO: Implement uuidFromID() method.
+    }
+
+    public function update($uuid, $data)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function create($data)
+    {
+        // TODO: Implement create() method.
+    }
+
+    public function allUnpaginate()
+    {
+        // TODO: Implement allUnpaginate() method.
+    }
+}

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Criado por Maizer Aly de O. Gomes para api.quickepay.
+ * Email: maizer.gomes@gmail.com / maizer.gomes@ekutivasolutions / maizer.gomes@outlook.com
+ * Usuário: maizerg
+ * Data: 11/18/18
+ * Hora: 7:36 PM
+ */
+
+namespace %namespaces.contracts%;
+
+
+use %use.model%;
+use %use.interface%;
+
+class %use.modelName%Repository %extends%implements %use.modelName%Interface
+{
+    protected $model;
+
+    public function __construct(%use.modelName% $%use.modellowname%)
+    {
+        $this->model = $%use.modellowname%;
+    }
+}

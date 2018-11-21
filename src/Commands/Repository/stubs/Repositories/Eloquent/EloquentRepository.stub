@@ -1,0 +1,63 @@
+<?php
+/**
+ * Criado por Maizer Aly de O. Gomes para quickcloud.
+ * Email: maizer.gomes@gmail.com / maizer.gomes@ekutivasolutions / maizer.gomes@outlook.com
+ * Usuário: maizerg
+ * Data: 6/20/18
+ * Hora: 12:35 PM
+ */
+
+namespace %namespaces.contracts%;
+
+
+abstract class EloquentRepository
+{
+    /**
+     * @var \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
+     */
+    protected $model;
+
+    public function all()
+    {
+        return $this->model::paginate();
+    }
+
+    public function create($attributes)
+    {
+        return $this->model::create($attributes);
+    }
+
+    public function update($uuid, $data)
+    {
+        $record = $this->find($uuid);
+
+        return $record->update($data);
+    }
+
+    /**
+     * @param $uuid
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    public function find($uuid)
+    {
+        return $this->model->findOrFail($this->uuidToID($uuid));
+    }
+
+    protected function uuidToID($uuid)
+    {
+        abort_if(is_numeric($uuid), 404, "No results!");
+
+        return $this->model->uuid($uuid);
+    }
+
+    public function delete($uuid)
+    {
+        return $this->model->destroy($this->uuidToID($uuid));
+    }
+
+    protected function uuidFromID()
+    {
+        return $this->model->uuid();
+    }
+}

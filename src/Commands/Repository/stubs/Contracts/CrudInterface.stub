@@ -1,0 +1,24 @@
+<?php
+/**
+ * Criado por Maizer Aly de O. Gomes para api.quickepay.
+ * Email: maizer.gomes@gmail.com / maizer.gomes@ekutivasolutions / maizer.gomes@outlook.com
+ * Usuário: maizerg
+ * Data: 11/19/18
+ * Hora: 12:43 AM
+ */
+
+namespace %namespaces.contracts%;
+
+
+interface CrudInterface
+{
+    public function all();
+
+    public function find($uuid);
+
+    public function delete($uuid);
+
+    public function update($uuid, $data);
+
+    public function create($data);
+}
