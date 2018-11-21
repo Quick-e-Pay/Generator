@@ -19,11 +19,9 @@ class RepositoryCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Create new Repository Classes';
-
-    protected $namespace;
+    
     protected $model;
     protected $modelName;
-    protected $fileManager;
 
     protected $files = [
         'contracts'            => [
@@ -41,19 +39,6 @@ class RepositoryCommand extends GeneratorCommand
             'Filesystem' => __DIR__ . '/stubs/Repositories/Filesystem/Repository.stub',
         ],
     ];
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->namespace = app()->getNamespace();
-        $this->fileManager = app('files');
-    }
 
     /**
      * Execute the console command.

@@ -14,6 +14,21 @@ use Illuminate\Console\Command;
 
 abstract class GeneratorCommand extends Command
 {
+    protected $namespace;
+    protected $fileManager;
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->namespace = app()->getNamespace();
+        $this->fileManager = app('files');
+    }
+
     /**
      * @param $contract
      * @param $replacements
