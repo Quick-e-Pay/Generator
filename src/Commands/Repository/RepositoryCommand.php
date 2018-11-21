@@ -2,9 +2,10 @@
 
 namespace Quick3Pay\Generator\Commands\Repository;
 
+use Quick3Pay\Generator\Commands\CommandsInterface;
 use Quick3Pay\Generator\Commands\GeneratorCommand;
 
-class RepositoryCommand extends GeneratorCommand
+class RepositoryCommand extends GeneratorCommand implements CommandsInterface
 {
     /**
      * The name and signature of the console command.
@@ -55,6 +56,9 @@ class RepositoryCommand extends GeneratorCommand
         $this->createModelRepository();
 
         $this->info("Repository {$this->model} created!");
+        $this->line("");
+        $this->warn("Dont forget to add the interface bind in the RepositoryServiceProvider File:");
+        $this->warn("\$this->app->bind({$this->modelName}Interface::class, {$this->modelName}Repository::class);");
     }
 
     protected function checkModel()
