@@ -11,7 +11,7 @@ class RepositoryCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'quick3pay:make:repository {model} {--filesystem}';
+    protected $signature = 'scaffold:repository {model} {--filesystem}';
 
     /**
      * The console command description.
@@ -19,7 +19,7 @@ class RepositoryCommand extends GeneratorCommand
      * @var string
      */
     protected $description = 'Create new Repository Classes';
-    
+
     protected $model;
     protected $modelName;
 
