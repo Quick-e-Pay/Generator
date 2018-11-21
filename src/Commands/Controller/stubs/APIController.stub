@@ -1,0 +1,91 @@
+<?php
+
+namespace %namespace.apicontroller%;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
+use %namespace.controller%Http\Controllers\Controller;
+use %use.request%;
+use %use.resource%;
+use %use.collection%;
+use %use.interface%;
+
+class %controller.name% extends Controller
+{
+    /**
+     * @var \%use.interface%
+     */
+    protected $%model.name%;
+
+    /**
+     * %controller.name% constructor.
+     *
+     * @param \%use.interface% $%model.name%
+     */
+    public function __construct(%interface.name% $%model.name%)
+    {
+        $this->%model.name% = $%model.name%;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Resources\Json\ResourceCollection
+     */
+    public function index(): ResourceCollection
+    {
+        return new %collection.name%($this->%model.name%->all());
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \%use.request% $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store(%request.name% $request): Response
+    {
+        return response()->json([], 403);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param $uuid
+     *
+     * @return \%use.resource%
+     */
+    public function show($uuid): JsonResource
+    {
+        return new %resource.name%($this->%model.name%->find($uuid));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \%use.request% $request
+     * @param                                                 $uuid
+     *
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function update(%request.name% $request, $uuid): JsonResource
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $uuid
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($uuid): Response
+    {
+        $this->%model.name%->delete($uuid);
+
+        return response()->json([], 201);
+    }
+}

@@ -11,6 +11,7 @@ namespace Quick3Pay\Generator;
 
 
 use Illuminate\Support\ServiceProvider;
+use Quick3Pay\Generator\Commands\Controller\ControllerCommand;
 use Quick3Pay\Generator\Commands\Repository\RepositoryCommand;
 
 class GeneratorServiceProvider extends ServiceProvider
@@ -23,6 +24,7 @@ class GeneratorServiceProvider extends ServiceProvider
      */
     protected $commands = [
         RepositoryCommand::class,
+        ControllerCommand::class,
     ];
 
 
