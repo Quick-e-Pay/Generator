@@ -37,7 +37,7 @@ abstract class GeneratorCommand extends Command
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function createFile($contract, $replacements, $filePath, $folderPath): void
+    public function createFile($contract, $replacements, $filePath, $folderPath): void
     {
         $content = $this->fileManager->get($contract);
 
@@ -46,7 +46,7 @@ abstract class GeneratorCommand extends Command
         if (!$this->fileManager->exists($filePath)) {
 
             if (!$this->fileManager->exists($folderPath)) {
-                $this->fileManager->makeDirectory($folderPath, 0755, true);
+                $this->fileManager->makeDirectory($folderPath, 0755, true, true);
             }
             $this->fileManager->put($filePath, $content);
 
