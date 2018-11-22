@@ -16,7 +16,7 @@ use Quick3Pay\Generator\Commands\GeneratorCommand;
 class ControllerCommand extends GeneratorCommand implements CommandsInterface
 {
 
-    protected $signature = 'scaffold:controller {controller} {--api-version=} {--model=}';
+    protected $signature = 'scaffold:controller {controller} {--api-version=} {--model=} {--resource=} {--request=}';
 
     protected $description = 'Create new Controller Class';
 
@@ -25,10 +25,12 @@ class ControllerCommand extends GeneratorCommand implements CommandsInterface
     ];
 
     protected $modelName;
-    protected $ControllerName;
+    protected $controllerName;
     protected $controller;
     protected $apiVersion = 'v2';
     protected $namespacePath;
+    protected $resourceName;
+    protected $requestName;
 
     public function handle()
     {
@@ -50,15 +52,13 @@ class ControllerCommand extends GeneratorCommand implements CommandsInterface
                 exit();
             }
         }
-        $this->ControllerName = $this->extractNameFromClass($this->controller);
-        $this->modelName = $this->option('model')
-            ? $this->extractNameFromClass($this->option('model'))
-            : str_replace('Controller', '', $this->ControllerName);
+        $this->controllerName = $this->extractNameFromClass($this->controller);
+        $this->modelName = $this->option('model') ? $this->extractNameFromClass($this->option('model')) : str_replace('Controller', '', $this->controllerName);
+        $this->resourceName = $this->option('resource') ? $this->extractNameFromClass($this->option('resource')) : $this->modelName;
+        $this->requestName = $this->option('request') ? $this->extractNameFromClass($this->option('request')) : $this->modelName . 'Request';
 
-//Admin\Vsd\ClientController
         if (count($path = explode('\\', $this->argument('controller'))) > 1) {
             array_pop($path);
-
             $this->namespacePath = implode('\\', $path) . '\\';
         }
     }
@@ -82,26 +82,26 @@ class ControllerCommand extends GeneratorCommand implements CommandsInterface
         $contract = $this->files['APIController'];
 
         $folderPath = str_replace('\\', '/', app()->basePath() . "/app/Http/Controllers/{$this->apiVersion}/{$this->namespacePath}");
-        $filePath = $folderPath . $this->ControllerName . '.php';
+        $filePath = $folderPath . $this->controllerName . '.php';
 
         $replacements = [
             '%namespace.apicontroller%' => rtrim($this->namespace . "Http\Controllers\\{$this->apiVersion}\\{$this->namespacePath}", '\\'),
             '%namespace.controller%'    => $this->namespace,
-            '%use.request%'             => $request = $this->namespace . "Http\Requests\\{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}Request",
-            '%use.resource%'            => $resource = $this->namespace . "Http\Resources\\{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}",
-            '%use.collection%'          => $collection = $this->namespace . "Http\Resources\\{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}Collection",
+            '%use.request%'             => $request = $this->namespace . "Http\Requests\\{$this->apiVersion}\\{$this->namespacePath}{$this->requestName}",
+            '%use.resource%'            => $resource = $this->namespace . "Http\Resources\\{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}",
+            '%use.collection%'          => $collection = $this->namespace . "Http\Resources\\{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}Collection",
             '%use.interface%'           => $interface = $this->namespace . "Repositories\Contracts\\{$this->modelName}Interface",
             '%model.name%'              => strtolower($this->modelName),
-            '%controller.name%'         => $this->ControllerName,
+            '%controller.name%'         => $this->controllerName,
             '%interface.name%'          => $this->modelName . 'Interface',
-            '%collection.name%'         => $this->modelName . 'Collection',
-            '%request.name%'            => $this->modelName . 'Request',
-            '%resource.name%'           => $this->modelName,
+            '%collection.name%'         => $this->resourceName . 'Collection',
+            '%request.name%'            => $this->requestName,
+            '%resource.name%'           => $this->resourceName,
         ];
 
         if (!class_exists($request)) {
-            if ($this->confirm("A {$this->modelName}Request does not exist. Do you want to generate it?", true)) {
-                $this->call('make:request', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}Request"]);
+            if ($this->confirm("A {$this->requestName} does not exist. Do you want to generate it?", true)) {
+                $this->call('make:request', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->requestName}"]);
             }
         }
 
@@ -114,17 +114,16 @@ class ControllerCommand extends GeneratorCommand implements CommandsInterface
         }
 
         if (!class_exists($resource)) {
-            if ($this->confirm("A {$this->modelName}Resource does not exist. Do you want to generate it?", true)) {
-                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}"]);
+            if ($this->confirm("A {$this->resourceName}Resource does not exist. Do you want to generate it?", true)) {
+                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}"]);
             }
         }
 
         if (!class_exists($collection)) {
-            if ($this->confirm("A {$this->modelName}Collection does not exist. Do you want to generate it?", true)) {
-                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->modelName}Collection"]);
+            if ($this->confirm("A {$this->resourceName}Collection does not exist. Do you want to generate it?", true)) {
+                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}"]);
             }
         }
-
 
         $this->createFile($contract, $replacements, $filePath, $folderPath);
     }
