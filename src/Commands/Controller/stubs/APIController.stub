@@ -86,6 +86,6 @@ class %controller.name% extends Controller
     {
         $this->%model.name%->delete($uuid);
 
-        return response()->json([], 201);
+        return response()->json([], 204);
     }
 }
