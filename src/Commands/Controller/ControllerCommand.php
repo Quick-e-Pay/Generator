@@ -121,7 +121,7 @@ class ControllerCommand extends GeneratorCommand implements CommandsInterface
 
         if (!class_exists($collection)) {
             if ($this->confirm("A {$this->resourceName}Collection does not exist. Do you want to generate it?", true)) {
-                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}"]);
+                $this->call('make:resource', ['name' => "{$this->apiVersion}\\{$this->namespacePath}{$this->resourceName}Collection"]);
             }
         }
 
